@@ -11,5 +11,17 @@ module.exports = {
             else
                 callback(null)
         })
+    },
+    getAllUsers : (callback) => {
+
+    },
+    insertUser : (user, callback) => {
+        let sql = 'INSERT INTO user SET ?'
+        bd.query(sql, user, (err, data) => {
+            if (err)
+                return callback(null)
+            else
+                return callback(data)
+        })
     }
 }
