@@ -3,7 +3,6 @@ const bcrypt = require('bcrypt')
 
 const usernameValidate = (req, res) => {
     userDAO.findByUsername(req.params.username, (data) =>{
-
         try {
             if (!data) throw new Err("Usuario disponible")
 
@@ -31,19 +30,16 @@ const signup = (req, res) => {
     }
 
     userDAO.insertUser(user, (data) => {
-        console.log('data ==> ',data)
-        if (data && data.affectedRows === 1) {
-            res.send({
-                status: true,
-                message: 'Usuario creado exitosamente'
-            })
-        }
-        else {
-            res.send({
-                status:false,
-                message: 'Ha ocurrido un error al crear la cuenta de usuario'
-            })
-        }
+        res.send({
+            status: true,
+            message: 'Usuario creado exitosamente'
+        })
+    }, err => {
+        res.send({
+            status:false,
+            message: 'Ha ocurrido un error al crear la cuenta de usuario',
+            errorMessage: err
+        })
     })
 }
 
