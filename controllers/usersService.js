@@ -43,9 +43,36 @@ const signup = (req, res) => {
     })
 }
 
+const login = (req,res) => {
+    let username = req.body.username
+    let password = req.body.password
+    userDAO.findByUsername(username, (data) => {
+        if (data) {
+            if (bcrypt.compareSync(password, data.password)){
+                res.send({
+                    status: true,
+                    message: 'Contraseña correcta'
+                })
+            } else {
+                res.send({
+                    status: false,
+                    message: 'Contraseña incorrecta'
+                })
+            }
+        } else {
+            res.send({
+                status: false,
+                message: 'La cuenta de usuario no existe'
+            })
+        }
+    })
+
+}
+
 module.exports = {
     usernameValidate,
-    signup
+    signup,
+    login
 }
 
 
