@@ -1,5 +1,6 @@
 const userDAO = require('../models/usersDAO')
 const bcrypt = require('bcrypt')
+const jwt = require('../utils/GenerateJWT')
 
 const usernameValidate = (req, res) => {
     userDAO.findByUsername(req.params.username, (data) =>{
@@ -21,26 +22,37 @@ const usernameValidate = (req, res) => {
 }
 
 const signup = (req, res) => {
-    const user = {
-        idRol : req.body.idRol,
-        nombre : req.body.nombre,
-        apellidoPaterno : req.body.apellidoPaterno,
-        username : req.body.username,
-        password : bcrypt.hashSync(req.body.password,10)
-    }
+    console.log('Signup => in')
+    if (req.user) {
+        const user = {
+            idRol : req.body.idRol,
+            nombre : req.body.nombre,
+            apellidoPaterno : req.body.apellidoPaterno,
+            username : req.body.username,
+            password : bcrypt.hashSync(req.body.password,10)
+        }
 
-    userDAO.insertUser(user, (data) => {
-        res.send({
-            status: true,
-            message: 'Usuario creado exitosamente'
+        userDAO.insertUser(user, (data) => {
+            res.send({
+                status: true,
+                message: 'Usuario creado exitosamente'
+            })
+        }, err => {
+            res.send({
+                status:false,
+                message: 'Ha ocurrido un error al crear la cuenta de usuario',
+                errorMessage: err
+            })
         })
-    }, err => {
+    }
+    else {
         res.send({
             status:false,
-            message: 'Ha ocurrido un error al crear la cuenta de usuario',
-            errorMessage: err
+            message: 'Este servicio requiere el uso de un Token válido, contactar al administrador',
+            error: '100. Falta token'
         })
-    })
+    }
+
 }
 
 const login = (req,res) => {
@@ -48,10 +60,12 @@ const login = (req,res) => {
     let password = req.body.password
     userDAO.findByUsername(username, (data) => {
         if (data) {
+            console.log('Data =>',data)
             if (bcrypt.compareSync(password, data.password)){
                 res.send({
                     status: true,
-                    message: 'Contraseña correcta'
+                    message: 'Contraseña correcta',
+                    token: jwt.generateToken(data)
                 })
             } else {
                 res.send({
@@ -66,7 +80,6 @@ const login = (req,res) => {
             })
         }
     })
-
 }
 
 module.exports = {

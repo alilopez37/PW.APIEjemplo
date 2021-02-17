@@ -7,7 +7,7 @@ module.exports = {
             if (err) throw err
 
             if (data.length>0)
-                callback(data[0])
+                callback(data[0]) //Enviar el primer registro de la consulta
             else
                 callback(null)
         })
