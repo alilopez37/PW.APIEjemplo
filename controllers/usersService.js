@@ -23,6 +23,7 @@ const usernameValidate = (req, res) => {
 
 const signup = (req, res) => {
     console.log('Signup => in')
+
     if (req.user) {
         const user = {
             idRol : req.body.idRol,
@@ -31,7 +32,6 @@ const signup = (req, res) => {
             username : req.body.username,
             password : bcrypt.hashSync(req.body.password,10)
         }
-
         userDAO.insertUser(user, (data) => {
             res.send({
                 status: true,
