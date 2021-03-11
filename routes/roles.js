@@ -23,6 +23,7 @@ router.use('/', (req, res, next) => {
 })
 
 router.get('/getAllRoles',rolesService.getAllRoles);
+router.delete('/deleteRol/:idRol', rolesService.deleteRol);
 
 module.exports = router;
 

@@ -19,7 +19,27 @@ const getAllRoles = (req,res) => {
     })
 };
 
+const deleteRol = (req, res) => {
+    rolesDAO.deleteRol(req.params.idRol, data => {
+        try {
+            if (!data) throw new Err("Hubo un error en el proceso")
+            if (data.affectedRows === 0) throw new Err(`Falló la eliminación del idRol: ${req.params.idRol}`)
+            res.send({
+                status: true,
+                message: `Eliminación de idRol: ${req.params.idRol} fue exitosa`
+            })
+        }
+        catch (Err) {
+            res.send({
+                status: false,
+                message: '<Personalizar el mensaje de error'
+            })
+        }
+    })
+}
+
 module.exports = {
     getAllRoles,
+    deleteRol,
 }
 
