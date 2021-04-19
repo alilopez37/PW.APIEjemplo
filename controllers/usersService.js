@@ -64,6 +64,7 @@ const login = (req,res) => {
             if (bcrypt.compareSync(password, data.password)){
                 res.send({
                     status: true,
+                    rol: idRol,
                     message: 'Contraseña correcta',
                     token: jwt.generateToken(data)
                 })

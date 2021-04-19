@@ -15,8 +15,6 @@ module.exports = {
     deleteRol: (idRol, callback) => {
         let sql = 'DELETE FROM roles WHERE idRol = ?'
         bd.query(sql,idRol, (err, data) => {
-            console.log("err =>",err)
-            console.log("data =>",data)
             try {
                 if (err) throw new Err('Error en la eliminación')
                 return callback(data)
